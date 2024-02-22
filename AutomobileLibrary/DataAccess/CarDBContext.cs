@@ -63,7 +63,7 @@ namespace AutomobileLibrary.DataAccess
         {
             Car car = null;
             IDataReader dataReader = null;
-            string SQLSelect = "Select CarID, CarName, Manufacturer, Price, ReleasedYear" + "from Cars where CarID = @CarID";
+            string SQLSelect = "Select CarID, CarName, Manufacturer, Price, ReleasedYear " + "from Cars where CarID = @CarID";
             try
             {
                 var param = dataProvider.CreateParameter("@CarID", 4, carID, DbType.Int32);
@@ -105,7 +105,7 @@ namespace AutomobileLibrary.DataAccess
                     parameters.Add(dataProvider.CreateParameter("@Manufacturer", 50, car.Manufacturer, DbType.String));
                     parameters.Add(dataProvider.CreateParameter("@Price", 50, car.Price, DbType.Decimal));
                     parameters.Add(dataProvider.CreateParameter("@ReleasedYear", 4, car.ReleaseYear, DbType.Int32));
-                    dataProvider.Insert(SQLInsert, CommandType.Text, parameters.ToArray());
+                    dataProvider.Insert(SQLInsert,CommandType.Text, parameters.ToArray());
                 }
                 else
                 {
