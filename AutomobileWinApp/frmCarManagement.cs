@@ -142,7 +142,13 @@ namespace AutomobileWinApp
         {
             try
             {
-                var = car
+                var car = GetCarObject();
+                carRepository.DeleteCar(car.CarID);
+                LoadCarList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Delete a car");
             }
         }
     }
