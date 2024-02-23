@@ -129,7 +129,7 @@ namespace AutomobileLibrary.DataAccess
                 if (c != null)
                 {
                     string SQLUpdate = "Update Cars set CarName = @CarName, Manufacturer = @Manufacturer," +
-                        "Price = @Price, ReleasedYear=@Released Year where CarID=@CarID";
+                        "Price = @Price, ReleasedYear=@ReleasedYear where CarID=@CarID";
                     var parameters = new List<SqlParameter>();
                     parameters.Add(dataProvider.CreateParameter("@CarID", 4, car.CarID, DbType.Int32));
                     parameters.Add(dataProvider.CreateParameter("@CarName", 50, car.CarName, DbType.String));

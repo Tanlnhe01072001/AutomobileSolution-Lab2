@@ -7,21 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AutomobileLibrary.BussinessObject;
 using AutomobileLibrary.Repository;
-
+using AutomobileLibrary.BussinessObject;
+using System.Linq.Expressions;
 namespace AutomobileWinApp
 {
     public partial class frmCarManagement : Form
     {
         ICarRepository carRepository = new CarRepository();
         BindingSource source;
+
         public frmCarManagement()
         {
             InitializeComponent();
         }
 
-        private void txtCarID_TextChanged(object sender, EventArgs e)
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }
@@ -31,15 +32,14 @@ namespace AutomobileWinApp
             btnDelete.Enabled = false;
             dgvCarList.CellDoubleClick += DgvCarList_CellDoubleClick;
         }
-
         private void DgvCarList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             frmCarDetails frmCarDetails = new frmCarDetails
             {
-                Text = "Update Car",
+                Text = "Update car",
                 InsertOrUpdate = true,
                 CarInfo = GetCarObject(),
-                CarRepository = carRepository
+                CarRepository = carRepository,
             };
             if (frmCarDetails.ShowDialog() == DialogResult.OK)
             {
@@ -47,45 +47,14 @@ namespace AutomobileWinApp
                 source.Position = source.Count - 1;
             }
         }
-
-        private void LoadCarList()
+        private void ClearText()
         {
-            var cars = carRepository.GetCars();
-            try
-            {
-                source = new BindingSource();
-                source.DataSource = cars;
-
-                txtCarID.DataBindings.Clear();
-                txtCarName.DataBindings.Clear();
-                txtManufacturer.DataBindings.Clear();
-                txtPrice.DataBindings.Clear();
-                txtReleaseYear.DataBindings.Clear();
-
-                txtCarID.DataBindings.Add("Text", source, "CarID");
-                txtCarName.DataBindings.Add("Text", source, "CarName");
-                txtManufacturer.DataBindings.Add("Text", source, "Manufacturer");
-                txtPrice.DataBindings.Add("Text", source, "Price");
-                txtReleaseYear.DataBindings.Add("Text", source, "ReleaseYear");
-
-                dgvCarList.DataSource = null;
-                dgvCarList.DataSource = source;
-                if (cars.Count() == 0)
-                {
-                    ClearText();
-                    btnDelete.Enabled = false;
-                }
-                else
-                {
-                    btnDelete.Enabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Load car List");
-            }
+            txtCarID.Text = string.Empty;
+            txtCarName.Text = string.Empty;
+            txtManufacturer.Text = string.Empty;
+            txtPrice.Text = string.Empty;
+            txtReleaseYear.Text = string.Empty;
         }
-
         private Car GetCarObject()
         {
             Car car = null;
@@ -106,14 +75,43 @@ namespace AutomobileWinApp
             }
             return car;
         }
-
-        private void ClearText()
+        public void LoadCarList()
         {
-            txtCarID.Text = string.Empty;
-            txtCarName.Text = string.Empty;
-            txtManufacturer.Text = string.Empty;
-            txtPrice.Text = string.Empty;
-            txtReleaseYear.Text = string.Empty;
+            var cars = carRepository.GetCars();//Truy xuất danh sách ô tô từ tệp carRepository
+            try
+            {
+                source = new BindingSource();
+                source.DataSource = cars;//đặt DataSource của nó vào danh sách ô tô
+
+                //Xóa các ràng buộc dữ liệu hiện có cho hộp văn bản
+                txtCarID.DataBindings.Clear();
+                txtCarName.DataBindings.Clear();
+                txtManufacturer.DataBindings.Clear();
+                txtPrice.DataBindings.Clear();
+                txtReleaseYear.DataBindings.Clear();
+
+                txtCarID.DataBindings.Add("Text", source, "CarID");
+                txtCarName.DataBindings.Add("Text", source, "CarName");
+                txtManufacturer.DataBindings.Add("Text", source, "Manufacturer");
+                txtPrice.DataBindings.Add("Text", source, "Price");
+                txtReleaseYear.DataBindings.Add("Text", source, "ReleaseYear");
+
+                dgvCarList.DataSource = null;
+                dgvCarList.DataSource = source;// xóa và đặt data.. của .. thành
+                if (cars.Count() == 0)
+                {
+                    ClearText();
+                    btnDelete.Enabled = false;// ngan chan nguoi dung sd dele khi k co car
+                }
+                else
+                {
+                    btnDelete.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Load car list");
+            }
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -128,8 +126,8 @@ namespace AutomobileWinApp
             frmCarDetails frmCarDetails = new frmCarDetails
             {
                 Text = "Add car",
-                InsertOrUpdate = false,
-                CarRepository = carRepository
+                InsertOrUpdate = false,//cho pit rang day k pai la 1 cap nhat 
+                CarRepository = carRepository //Đặt thuộc tính CarRepository
             };
             if (frmCarDetails.ShowDialog() == DialogResult.OK)
             {
@@ -148,8 +146,18 @@ namespace AutomobileWinApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Delete a car");
+                MessageBox.Show(ex.Message, "Delete a Car");
             }
+        }
+
+        private void dgvCarList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void txtCarID_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
